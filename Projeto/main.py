@@ -18,3 +18,40 @@ class PontoDeAcesso:
 
         except subprocess.CalledProcessError as e:
             print(f'Erro ao criar o ponto de acesso "{self.ssid}": {e}')
+            
+    
+
+def solicitar_dados_ap() -> PontoDeAcesso:
+        while True:
+            ssid = input("Digite o nome (SSID) do AP: ").strip()
+            if not ssid:
+                print("O SSID não pode estar vazio. Tente novamente.")
+                continue
+            
+            senha = input("Digite a senha do AP (mínimo 8 caracteres): ").strip()
+            if len(senha) < 8:
+                print("A senha deve ter pelo menos 8 caracteres. Tente novamente.")
+                continue
+            
+            return PontoDeAcesso(ssid, senha)
+
+def main():
+        try:
+            quantidade_aps = int(input("Digite a quantidade de pontos de acesso que deseja criar: "))
+            if quantidade_aps <= 0:
+                print("A quantidade deve ser um número positivo.")
+                return
+
+            aps = [solicitar_dados_ap() for _ in range(quantidade_aps)]
+
+            for ap in aps:
+                ap.criar()
+
+        except ValueError:
+            print("Entrada inválida. Certifique-se de digitar um número para a quantidade de APs.")
+        except Exception as e:
+            print(f"Ocorreu um erro inesperado: {e}")
+
+    
+if __name__ == "__main__":
+        main()
